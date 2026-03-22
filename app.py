@@ -28,8 +28,8 @@ async def fetch_anker_data():
         await api.update_device_details()
         return {"sites": api.sites, "devices": api.devices}
 
-# Cache die Daten für 55 Sekunden, um das Anker API Rate-Limit (10-12/Minute) nicht zu reizen.
-@st.cache_data(ttl=55)
+# Cache die Daten für 30 Sekunden (schneller als 60s, aber sicher für Rate-Limit).
+@st.cache_data(ttl=30)
 def get_data():
     if not USER or not PASSWORD:
         return None
@@ -111,7 +111,7 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
     sites = api_data.get("sites", {})
     devices = api_data.get("devices", {})
 
-    st.success(f"Daten geladen! (Letztes Update: {datetime.now().strftime('%H:%M:%S')}) - Der Cache läuft nach 55 Sekunden ab.")
+    st.success(f"Daten geladen! (Letztes Update: {datetime.now().strftime('%H:%M:%S')}) - Das Dashboard aktualisiert sich automatisch alle 30 Sekunden.")
 
     if st.button("🔄 Manuelles Update erzwingen (Cache löschen)", use_container_width=True):
         get_data.clear()
@@ -203,11 +203,11 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
     
     t_col1, t_col2, t_col3, t_col4 = st.columns(4)
     with t_col1:
-        st.metric("PV-Ertrag heute", f"{energy_today.get('solar', 0)} kWh")
+        st.metric("PV-Ertrag heute", f"{energy_today.get('solar_production', 0)} kWh")
     with t_col2:
-        st.metric("Haus-Verbrauch", f"{energy_today.get('home', 0)} kWh")
+        st.metric("Haus-Verbrauch", f"{energy_today.get('home_usage', 0)} kWh")
     with t_col3:
-        st.metric("Einspeisung", f"{energy_today.get('grid_export', 0)} kWh")
+        st.metric("Einspeisung", f"{energy_today.get('solar_to_grid', 0)} kWh")
     with t_col4:
         st.metric("Netzbezug", f"{energy_today.get('grid_import', 0)} kWh")
 
@@ -216,3 +216,7 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
     # 🐛 DEBUG DATEN
     with st.expander("🛠 Raw JSON API Response (für Debugging der spezifischen X1 Keys)"):
         st.json({"site": site, "device": device_data})
+
+import time
+time.sleep(30)
+st.rerun()
