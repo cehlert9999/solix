@@ -147,7 +147,11 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
             except:
                 return 0
 
-        soc = power.get("state_of_charge", "N/A")
+        try:
+            soc = int(power.get("state_of_charge", 0))
+        except:
+            soc = 0
+            
         solar_power = to_watts(power.get("solar_power_avg", 0))
         grid_import = to_watts(power.get("grid_import_avg", 0))
         grid_export = to_watts(power.get("grid_export_avg", 0))
@@ -166,7 +170,7 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
     # Erste Reihe
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.plotly_chart(create_steam_gauge(soc if soc != "N/A" else 0, "SOC (Batterie)", 100, "%", color="#1f77b4"), use_container_width=True)
+        st.plotly_chart(create_steam_gauge(soc, "SOC (Batterie)", 100, "%", color="#1f77b4"), use_container_width=True)
     with col2:
         st.plotly_chart(create_steam_gauge(solar_power, "PV-Leistung", 6000, "W", color="#ff7f0e"), use_container_width=True)
     with col3:
