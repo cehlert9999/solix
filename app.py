@@ -22,10 +22,10 @@ async def fetch_anker_data():
     logger = logging.getLogger(__name__)
     async with ClientSession() as session:
         api = AnkerSolixApi(USER, PASSWORD, COUNTRY, session, logger)
-        # Gemäß spec.md limitiert, ruft sites und energy ab
         await api.update_sites()
         await api.update_device_energy()
-        return api.sites
+        await api.update_device_details()
+        return {"sites": api.sites, "devices": api.devices}
 
 # Cache die Daten für 55 Sekunden, um das Anker API Rate-Limit (10-12/Minute) nicht zu reizen.
 @st.cache_data(ttl=55)
@@ -58,42 +58,64 @@ if not USER or not PASSWORD:
 
 # Lade Animation inkl. Caching Info
 with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)..."):
-    sites = get_data()
+    api_data = get_data()
 
-if not sites:
-    st.warning("Keine Daten gefunden. Bitte Zugangsdaten in der `.env` Datei überprüfen.")
-    st.stop()
+    if not api_data or not api_data.get("sites"):
+        st.warning("Keine Daten gefunden. Bitte Zugangsdaten in der `.env` Datei überprüfen.")
+        st.stop()
 
 # Info-Leiste
-st.success(f"Daten geladen! (Letztes Update: {datetime.now().strftime('%H:%M:%S')}) - Der Cache läuft nach 55 Sekunden ab.")
+    sites = api_data.get("sites", {})
+    devices = api_data.get("devices", {})
 
-if st.button("🔄 Manuelles Update erzwingen (Cache löschen)", use_container_width=True):
-    get_data.clear()
-    st.rerun()
+    st.success(f"Daten geladen! (Letztes Update: {datetime.now().strftime('%H:%M:%S')}) - Der Cache läuft nach 55 Sekunden ab.")
 
-st.markdown("---")
+    if st.button("🔄 Manuelles Update erzwingen (Cache löschen)", use_container_width=True):
+        get_data.clear()
+        st.rerun()
 
-# Iteration über alle gefundenen Sites (meistens nur 1 Anlage)
-for site_id, site in sites.items():
-    site_info = site.get("site_info", {})
-    site_name = site_info.get("site_name", "Unbekannt")
-    
-    st.header(f"🏡 Anlage: {site_name}")
-    
-    # === DATEN EXTRAKTION (Möglichst flexibel für X1 & Solarbank) ===
-    # Die API Response hängt leicht vom Model ab. Wir greifen auf die typischen Keys zu.
-    power = site.get("energy_details", {}).get("average_power", site_info.get("power_info", {}))
-    soc = site_info.get("batt_soc", site_info.get("battery_soc", "N/A"))
-    
-    # X1 spezifische Power-Werte
-    batt_power = power.get("battery_power_avg", power.get("batt_power", 0))
-    solar_power = power.get("solar_power_avg", power.get("photovoltaic_power", 0))
-    grid_import = power.get("grid_import_avg", 0)
-    grid_export = power.get("grid_export_avg", 0)
-    home_power = power.get("home_usage_avg", power.get("load_power", 0))
-    
-    # Bestimme Energiefluss Netz (Positiv = Einspeisen, Negativ = Bezug)
-    grid_flow = grid_export if grid_export > 0 else -grid_import
+    st.markdown("---")
+
+    # Iteration über alle gefundenen Sites (meistens nur 1 Anlage)
+    for site_id, site in sites.items():
+        site_info = site.get("site_info", {})
+        site_name = site_info.get("site_name", "Unbekannt")
+        
+        st.header(f"🏡 Anlage: {site_name}")
+        
+        # === DATEN EXTRAKTION X1 (HES) ===
+        # Finde das Hauptgerät (meistens in hes_info -> main_sn hinterlegt)
+        main_sn = site.get("hes_info", {}).get("main_sn")
+        device_data = devices.get(main_sn, {}) if main_sn else {}
+        
+        # Falls kein main_sn, suche nach einem Gerät mit average_power (Fallback)
+        if not device_data:
+            for d in devices.values():
+                if "average_power" in d:
+                    device_data = d
+                    break
+                    
+        power = device_data.get("average_power", {})
+        
+        # X1 spezifische Power-Werte (sind in kW formatiert als Strings laut debug.json)
+        def to_watts(kw_str):
+            try:
+                return round(float(kw_str) * 1000)
+            except:
+                return 0
+
+        soc = power.get("state_of_charge", "N/A")
+        solar_power = to_watts(power.get("solar_power_avg", 0))
+        grid_import = to_watts(power.get("grid_import_avg", 0))
+        grid_export = to_watts(power.get("grid_export_avg", 0))
+        home_power = to_watts(power.get("home_usage_avg", 0))
+        
+        charge_p = to_watts(power.get("charge_power_avg", 0))
+        discharge_p = to_watts(power.get("discharge_power_avg", 0))
+        batt_power = charge_p - discharge_p
+        
+        # Bestimme Energiefluss Netz (Positiv = Einspeisen, Negativ = Bezug)
+        grid_flow = grid_export if grid_export > 0 else -grid_import
     
     # 🔴 LIVE DATEN
     st.subheader("🔴 Live-Leistung")
@@ -129,4 +151,4 @@ for site_id, site in sites.items():
     
     # 🐛 DEBUG DATEN
     with st.expander("🛠 Raw JSON API Response (für Debugging der spezifischen X1 Keys)"):
-        st.json(site)
+        st.json({"site": site, "device": device_data})
