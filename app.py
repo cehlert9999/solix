@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from datetime import datetime
 import json
 import logging
+import plotly.graph_objects as go
 
 # Lade Umgebungsvariablen
 load_dotenv()
@@ -47,6 +48,48 @@ def get_data():
         return None
 
 # --- UI Aufbau ---
+
+def create_steam_gauge(value, title, limit, unit="W", color="orange"):
+    """Generiert einen mechanisch aussehenden Gauge-Chart ('Dampfuhr')"""
+    # Wenn der Wert negativ sein kann (zB Netz-Fluss), passe das Minimum an
+    min_val = min(0, value) if value < 0 else 0
+    max_val = max(limit, value)
+    
+    # Absolute Fließwerte (Entladen/Laden) in der Gauge-Farbe visualisieren
+    bar_color = "red" if value < 0 else "green"
+    if title in ["SOC (Batterie)", "PV-Leistung", "Haus-Verbrauch"]:
+        bar_color = color
+
+    fig = go.Figure(go.Indicator(
+        mode = "gauge+number",
+        value = value,
+        title = {'text': title, 'font': {'size': 20, 'color': '#b8860b'}}, # Darkgoldenrod
+        number = {'suffix': f" {unit}", 'font': {'color': 'white'}},
+        gauge = {
+            'axis': {'range': [min_val, max_val], 'tickwidth': 2, 'tickcolor': "#8b0000"},
+            'bar': {'color': bar_color},
+            'bgcolor': "#1a1a1a",
+            'borderwidth': 3,
+            'bordercolor': "#8b4513", # SaddleBrown (Messing/Kupfer Look)
+            'steps': [
+                {'range': [min_val, max_val*0.5], 'color': "rgba(50, 50, 50, 0.8)"},
+                {'range': [max_val*0.5, max_val], 'color': "rgba(80, 80, 80, 0.8)"}
+            ],
+            'threshold': {
+                'line': {'color': "red", 'width': 4},
+                'thickness': 0.75,
+                'value': max_val * 0.95
+            }
+        }
+    ))
+    
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        font={'color': "#b8860b", 'family': "Courier New"},
+        height=250,
+        margin=dict(l=20, r=20, t=40, b=20)
+    )
+    return fig
 
 st.title("⚡ Anker X1 Dev Dashboard")
 
@@ -117,19 +160,26 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
         # Bestimme Energiefluss Netz (Positiv = Einspeisen, Negativ = Bezug)
         grid_flow = grid_export if grid_export > 0 else -grid_import
     
-    # 🔴 LIVE DATEN
-    st.subheader("🔴 Live-Leistung")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("SOC (Batterie)", f"{soc} %")
-    with col2:
-        st.metric("PV-Leistung", f"{solar_power} W")
-    with col3:
-        st.metric("Batterie-Fluss", f"{batt_power} W", help="Negativ = Entladen | Positiv = Laden")
-    with col4:
-        st.metric("Haus-Verbrauch", f"{home_power} W")
+    # 🔴 LIVE DATEN "Dampfuhren"
+    st.subheader("🔴 Live-Leistung (Dampfuhren)")
     
-    st.metric("Netz-Fluss", f"{grid_flow} W", help="Negativ = Strombezug | Positiv = Einspeisung")
+    # Erste Reihe
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.plotly_chart(create_steam_gauge(soc if soc != "N/A" else 0, "SOC (Batterie)", 100, "%", color="#1f77b4"), use_container_width=True)
+    with col2:
+        st.plotly_chart(create_steam_gauge(solar_power, "PV-Leistung", 6000, "W", color="#ff7f0e"), use_container_width=True)
+    with col3:
+        st.plotly_chart(create_steam_gauge(home_power, "Haus-Verbrauch", 5000, "W", color="#9467bd"), use_container_width=True)
+        
+    # Zweite Reihe
+    col4, col5 = st.columns(2)
+    with col4:
+        st.plotly_chart(create_steam_gauge(batt_power, "Batterie-Fluss", 3000, "W"), use_container_width=True)
+        st.caption("Negativ = Entladen | Positiv = Laden")
+    with col5:
+        st.plotly_chart(create_steam_gauge(grid_flow, "Netz-Fluss", 5000, "W"), use_container_width=True)
+        st.caption("Negativ = Strombezug | Positiv = Einspeisung")
     
     st.divider()
     

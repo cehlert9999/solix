@@ -1,0 +1,345 @@
+{
+  "sites": {
+    "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de": {
+      "type": "system",
+      "site_type": "hes",
+      "site_admin": true,
+      "site_id": "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de",
+      "site_info": {
+        "site_id": "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de",
+        "site_name": "Solix x 1",
+        "site_img": "",
+        "device_type_list": [
+          4
+        ],
+        "ms_type": 1,
+        "power_site_type": 3,
+        "is_allow_delete": false,
+        "support_device_models": [
+          "A5103",
+          "A5220",
+          "A5191",
+          "AX1S0"
+        ],
+        "current_site_device_models": [
+          "A5220",
+          "A5103"
+        ],
+        "init_status": 1,
+        "site_device_list": [
+          {
+            "device_model": "A5220",
+            "device_sn": "ASK8330E34500202",
+            "device_name": "",
+            "device_img": "",
+            "device_type": 4,
+            "status": 1,
+            "init_status": 0,
+            "create_time": 0,
+            "update_time": 0,
+            "feature": null
+          },
+          {
+            "device_model": "A5220",
+            "device_sn": "ASK8330E36600465",
+            "device_name": "",
+            "device_img": "",
+            "device_type": 4,
+            "status": 1,
+            "init_status": 0,
+            "create_time": 0,
+            "update_time": 0,
+            "feature": null
+          },
+          {
+            "device_model": "A5103",
+            "device_sn": "ATHRE01F10200249",
+            "device_name": "",
+            "device_img": "",
+            "device_type": 4,
+            "status": 1,
+            "init_status": 0,
+            "create_time": 0,
+            "update_time": 0,
+            "feature": null
+          }
+        ]
+      },
+      "hes_info": {
+        "hes_list": [
+          {
+            "sn": "ATHRE01F10200249",
+            "pn": "A5103",
+            "type": "pcs",
+            "img": "",
+            "name": "A5103_ARM",
+            "aliasName": "X1-H (5~12)K-T",
+            "subDevInfo": [
+              {
+                "sn": "ATHRE01F10200249",
+                "pn": "A5103",
+                "type": "ems",
+                "img": "",
+                "name": "A5103_ARM",
+                "aliasName": "X1-H (5~12)K-T"
+              },
+              {
+                "sn": "ATHRE01F10200249",
+                "pn": "A5103",
+                "type": "pcs",
+                "img": "",
+                "name": "A5103_ARM",
+                "aliasName": "X1-H (5~12)K-T"
+              },
+              {
+                "sn": "ASK8330E36600465",
+                "pn": "A5220",
+                "type": "pack",
+                "img": "",
+                "name": "A5220_BMS",
+                "aliasName": "Battery Module"
+              },
+              {
+                "sn": "ASK8330E34500202",
+                "pn": "A5220",
+                "type": "pack",
+                "img": "",
+                "name": "A5220_BMS",
+                "aliasName": "Battery Module"
+              }
+            ]
+          }
+        ],
+        "main_sn": "ATHRE01F10200249",
+        "main_pn": "A5103",
+        "connected": true,
+        "numberOfParallelDevice": 1,
+        "batCount": 2,
+        "rePostTime": 5,
+        "net": 2,
+        "realNet": 2,
+        "supportDiesel": false,
+        "isAddHeatPump": true,
+        "systemCode": "DE202511180003",
+        "emsDisable": false,
+        "hasEvCharger": false,
+        "evChargerInfos": null,
+        "countryCode": "DE",
+        "mode": 0
+      },
+      "energy_offset_seconds": -132,
+      "energy_offset_check": "2026-03-22 13:16:58",
+      "energy_offset_tz": 0,
+      "energy_details": {
+        "today": {
+          "date": "2026-03-22",
+          "battery_charge": "10.93",
+          "battery_discharge": "0.41",
+          "solar_production": "21.15",
+          "solar_to_battery": "10.79",
+          "home_usage": "13.65",
+          "battery_to_home": "0.41",
+          "battery_percentage": "0.03",
+          "solar_to_home": "7.96",
+          "solar_percentage": "0.58",
+          "grid_to_home": "5.28",
+          "other_percentage": "0.39",
+          "grid_import": "5.42",
+          "grid_to_battery": "0.14",
+          "solar_to_grid": "2.40"
+        },
+        "last_period": {
+          "date": "2026-03-21",
+          "battery_discharge": "3.49",
+          "home_usage": "22.73",
+          "battery_to_home": "3.46",
+          "battery_percentage": "0.15",
+          "solar_to_home": "4.45",
+          "solar_percentage": "0.2",
+          "grid_to_home": "14.82",
+          "other_percentage": "0.65",
+          "grid_import": "14.82",
+          "grid_to_battery": "0.00",
+          "solar_to_grid": "0.14",
+          "solar_production": "8.00",
+          "solar_to_battery": "3.41",
+          "battery_charge": "3.41"
+        }
+      },
+      "statistics": [
+        {
+          "type": "1",
+          "total": "1.24",
+          "unit": "mwh"
+        },
+        {
+          "type": "2",
+          "total": "2",
+          "unit": "t"
+        },
+        {
+          "type": "3",
+          "total": "4.6",
+          "unit": "\u20ac"
+        }
+      ],
+      "site_details": {
+        "price": 0,
+        "site_co2": 0,
+        "site_price_unit": "\u20ac",
+        "price_type": "",
+        "current_mode": 0,
+        "use_time": null,
+        "dynamic_price": null,
+        "accuracy": 2,
+        "co2_ranking": {
+          "ranking": "",
+          "co2": "",
+          "tree": "",
+          "content": "",
+          "level": null
+        },
+        "dynamic_price_details": {
+          "dynamic_price_provider": "-/-/-",
+          "dynamic_price_fee": "0.17895",
+          "dynamic_price_vat": "19",
+          "dynamic_price_total": ""
+        }
+      }
+    }
+  },
+  "devices": {
+    "ATHRE01F10200249": {
+      "device_sn": "ATHRE01F10200249",
+      "site_id": "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de",
+      "is_admin": true,
+      "device_pn": "A5103",
+      "mqtt_supported": true,
+      "mqtt_overlay": false,
+      "mqtt_status_request": false,
+      "type": "hes",
+      "status": "1",
+      "status_desc": "online",
+      "battery_size": 5000,
+      "expansion_packs": 0,
+      "battery_capacity": "10000",
+      "owner_user_id": "66820b97e61e71e785ada5d358a2bb196b29968b",
+      "bt_ble_mac": "00008458",
+      "name": "X1-H(5~12)K-T",
+      "alias": "X1-H (5~12)K-T",
+      "wifi_online": true,
+      "relate_type": [
+        "ble",
+        "wifi"
+      ],
+      "charge": false,
+      "bws_surplus": "0",
+      "sw_version": "v1.0.12.5",
+      "hes_data": {
+        "station_id": "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de",
+        "type": "pcs",
+        "online_status": 1,
+        "master_slave_status": 1,
+        "network_status": 2,
+        "grid_status": 0,
+        "rssi": "",
+        "status_desc": "online",
+        "role_status_desc": "primary",
+        "grid_status_desc": "ok",
+        "network_status_desc": "lan"
+      },
+      "tag": "",
+      "platform_tag": "",
+      "rssi": "",
+      "intgr_device": null,
+      "wifi_mac": "E8EECCA2F849",
+      "group_info": null,
+      "is_ota_update": false,
+      "ota_version": "v1.0.12.5",
+      "main_sn": "ATHRE01F10200249",
+      "is_primary": true,
+      "batCount": 2,
+      "average_power": {
+        "last_check": "2026-03-22 13:16:58",
+        "valid_time": "2026-03-22 13:19:55",
+        "offset_seconds": -122,
+        "power_unit": "kw",
+        "discharge_power_avg": "0.00",
+        "charge_power_avg": "0.00",
+        "state_of_charge": "100",
+        "solar_power_avg": "4.67",
+        "home_usage_avg": "0.96",
+        "grid_export_avg": "3.71",
+        "grid_import_avg": "0.00"
+      },
+      "battery_energy": "10000",
+      "wifi_signal": "100"
+    },
+    "ASK8330E34500202": {
+      "device_sn": "ASK8330E34500202",
+      "is_admin": true,
+      "owner_user_id": "66820b97e61e71e785ada5d358a2bb196b29968b",
+      "device_pn": "A5220",
+      "mqtt_supported": true,
+      "mqtt_overlay": false,
+      "mqtt_status_request": false,
+      "type": "hes",
+      "name": "X1 Battery Module",
+      "alias": "Battery Module",
+      "wifi_online": false,
+      "relate_type": [
+        "ble",
+        "wifi"
+      ],
+      "charge": false,
+      "bws_surplus": "0",
+      "tag": "",
+      "platform_tag": "",
+      "rssi": "",
+      "intgr_device": null,
+      "group_info": null,
+      "battery_size": 5000,
+      "expansion_packs": 0,
+      "battery_capacity": "5000",
+      "is_ota_update": false,
+      "ota_version": "",
+      "site_id": "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de",
+      "main_sn": "ATHRE01F10200249",
+      "is_subdevice": true,
+      "wifi_signal": "100"
+    },
+    "ASK8330E36600465": {
+      "device_sn": "ASK8330E36600465",
+      "is_admin": true,
+      "owner_user_id": "66820b97e61e71e785ada5d358a2bb196b29968b",
+      "device_pn": "A5220",
+      "mqtt_supported": true,
+      "mqtt_overlay": false,
+      "mqtt_status_request": false,
+      "type": "hes",
+      "name": "X1 Battery Module",
+      "alias": "Battery Module",
+      "wifi_online": false,
+      "relate_type": [
+        "ble",
+        "wifi"
+      ],
+      "charge": false,
+      "bws_surplus": "0",
+      "tag": "",
+      "platform_tag": "",
+      "rssi": "",
+      "intgr_device": null,
+      "group_info": null,
+      "battery_size": 5000,
+      "expansion_packs": 0,
+      "battery_capacity": "5000",
+      "is_ota_update": false,
+      "ota_version": "",
+      "site_id": "255ca79c-fbf0-4fc0-a8d3-7c3f10c982de",
+      "main_sn": "ATHRE01F10200249",
+      "is_subdevice": true,
+      "wifi_signal": "100"
+    }
+  }
+}
