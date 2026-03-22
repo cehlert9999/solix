@@ -63,8 +63,8 @@ def create_steam_gauge(value, title, limit, unit="W", color="orange"):
     fig = go.Figure(go.Indicator(
         mode = "gauge+number",
         value = value,
-        title = {'text': title, 'font': {'size': 20, 'color': '#b8860b'}}, # Darkgoldenrod
-        number = {'suffix': f" {unit}", 'font': {'color': 'white'}},
+        title = {'text': title, 'font': {'size': 14, 'color': '#b8860b'}}, # Darkgoldenrod
+        number = {'suffix': f" {unit}", 'font': {'size': 18, 'color': 'white'}},
         gauge = {
             'axis': {'range': [min_val, max_val], 'tickwidth': 2, 'tickcolor': "#8b0000"},
             'bar': {'color': bar_color},
@@ -86,8 +86,8 @@ def create_steam_gauge(value, title, limit, unit="W", color="orange"):
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         font={'color': "#b8860b", 'family': "Courier New"},
-        height=220,
-        margin=dict(l=10, r=10, t=30, b=10)
+        height=140,
+        margin=dict(l=5, r=5, t=25, b=5)
     )
     return fig
 
