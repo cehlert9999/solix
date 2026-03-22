@@ -1,0 +1,20 @@
+# Credentials und API Keys niemals hochladen!
+.env
+credentials.txt
+
+# Python Caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env_back/
+
+# Editor/OS spezifisch
+.vscode/
+.idea/
+.DS_Store
