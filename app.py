@@ -164,26 +164,40 @@ with st.spinner("Lade Daten aus der Anker Cloud (Rate-Limit Cache max. 1x / 55s)
         # Bestimme Energiefluss Netz (Positiv = Einspeisen, Negativ = Bezug)
         grid_flow = grid_export if grid_export > 0 else -grid_import
     
-    # 🔴 LIVE DATEN "Dampfuhren"
-    st.subheader("🔴 Live-Leistung (Dampfuhren)")
+    # 🔴 LIVE DATEN "Zahlen & Dampfuhren"
+    st.subheader("🔴 Live-Leistung")
     
-    # Erste Reihe
+    # Erste Reihe: pure Zahlen
+    m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+    with m_col1:
+        st.metric("SOC (Batterie)", f"{soc} %")
+    with m_col2:
+        st.metric("PV-Leistung", f"{solar_power} W")
+    with m_col3:
+        st.metric("Batterie-Fluss", f"{batt_power} W", help="Negativ = Entladen | Positiv = Laden")
+    with m_col4:
+        st.metric("Haus-Verbrauch", f"{home_power} W")
+        
+    st.metric("Netz-Fluss", f"{grid_flow} W", help="Negativ = Strombezug | Positiv = Einspeisung")
+    
+    st.divider()
+    st.subheader("🚂 Visualisierung (Dampfuhren)")
+    
+    # Zweite Reihe: Gauges
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.plotly_chart(create_steam_gauge(soc, "SOC (Batterie)", 100, "%", color="#1f77b4"), use_container_width=True)
+        st.plotly_chart(create_steam_gauge(soc, "SOC", 100, "%", color="#1f77b4"), use_container_width=True)
     with col2:
-        st.plotly_chart(create_steam_gauge(solar_power, "PV-Leistung", 6000, "W", color="#ff7f0e"), use_container_width=True)
+        st.plotly_chart(create_steam_gauge(solar_power, "PV", 6000, "W", color="#ff7f0e"), use_container_width=True)
     with col3:
-        st.plotly_chart(create_steam_gauge(home_power, "Haus-Verbrauch", 5000, "W", color="#9467bd"), use_container_width=True)
+        st.plotly_chart(create_steam_gauge(home_power, "Haus", 5000, "W", color="#9467bd"), use_container_width=True)
         
-    # Zweite Reihe
+    # Dritte Reihe: Gauges
     col4, col5 = st.columns(2)
     with col4:
-        st.plotly_chart(create_steam_gauge(batt_power, "Batterie-Fluss", 3000, "W"), use_container_width=True)
-        st.caption("Negativ = Entladen | Positiv = Laden")
+        st.plotly_chart(create_steam_gauge(batt_power, "Batterie", 3000, "W"), use_container_width=True)
     with col5:
-        st.plotly_chart(create_steam_gauge(grid_flow, "Netz-Fluss", 5000, "W"), use_container_width=True)
-        st.caption("Negativ = Strombezug | Positiv = Einspeisung")
+        st.plotly_chart(create_steam_gauge(grid_flow, "Netz", 5000, "W"), use_container_width=True)
     
     st.divider()
     
