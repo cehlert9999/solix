@@ -5,3 +5,4 @@ python-dotenv>=1.0.1
 paho-mqtt>=1.6.1
 plotly>=5.18.0
 aiofiles>=23.2.1
+cryptography>=41.0.0
