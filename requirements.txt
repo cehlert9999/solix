@@ -1,4 +1,4 @@
 streamlit>=1.33.0
-anker-solix-api>=1.0.8
+git+https://github.com/thomluther/anker-solix-api.git
 aiohttp>=3.9.3
 python-dotenv>=1.0.1
